@@ -32,5 +32,18 @@ vips extract_band source_image.tif temp_image.v 0 --n 3 \
 ### Using ImageMagick
 
 ```bash
-convert source_image.tif -alpha off -define tiff:tile-geometry=256x256 -compress jpeg 'ptif:output_image.tif'
+convert source_image.tif -alpha off \
+  -define tiff:tile-geometry=256x256 \
+  -define tiff:generate-pyramids=true \
+  -compress jpeg \
+  'ptif:output_image.tif'
+```
+
+### Using GraphicsMagick
+
+```bash
+gm convert source_image.tif -flatten \
+  -define tiff:tile-geometry=256x256 \
+  -compress jpeg \
+  'ptif:output_image.tif'
 ```

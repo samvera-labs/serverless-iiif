@@ -1,11 +1,12 @@
 const IIIF = require('iiif-processor');
+const debug = require('debug')('serverless-iiif:lambda');
 const helpers = require('./helpers');
 const resolvers = require('./resolvers');
 const { errorHandler } = require('./error');
 const { streamifyResponse } = require('./streamify');
 
 const handleRequestFunc = streamifyResponse(async (event, context) => {
-  console.log('http path: ', event?.requestContext?.http?.path);
+  debug('http path: ', event?.requestContext?.http?.path);
   const { addCorsHeaders, eventPath, fileMissing } = helpers;
 
   context.callbackWaitsForEmptyEventLoop = false;
@@ -61,7 +62,9 @@ const handleServiceDiscoveryRequestFunc = () => {
 
 const executeResource = async (uri, streamResolver, dimensionFunction, density, sharpOptions = {}) => {
   try {
-    const resource = new IIIF.Processor(uri, streamResolver, { dimensionFunction, density, sharpOptions });
+    const debugBorder = process.env.debugBorder === 'true';
+    const pageThreshold = parseInt(process.env.pageThreshold) || undefined;
+    const resource = new IIIF.Processor(uri, streamResolver, { dimensionFunction, density, debugBorder, pageThreshold, sharpOptions });
     return await resource.execute();
   } catch (err) {
     if (/Invalid tile part index/.test(err.message) && !sharpOptions.jp2Oneshot) {

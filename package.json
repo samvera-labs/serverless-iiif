@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.395.0",
-    "aws-sdk-client-mock": "^3.0.0",
-    "aws-sdk-client-mock-jest": "^3.0.0",
+    "aws-sdk-client-mock": "3.0.0",
+    "aws-sdk-client-mock-jest": "3.0.0",
     "coveralls": "^3.1.0",
     "eslint": "^7.10.0",
     "eslint-config-standard": "^14.1.1",
